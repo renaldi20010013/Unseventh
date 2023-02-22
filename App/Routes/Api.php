@@ -30,6 +30,7 @@ Router::controller(AuthController::class)->group(function () {
     //for all role
     Router::post('/auth/login', 'login');
     Router::post('/auth/register', 'register');
+    Router::put('/auth/update/{username}', 'update');
 });
 
 Router::controller(RegController::class)->group(function(){

@@ -53,5 +53,28 @@ class AuthController extends Controller
                 'data' => $data
             ]);
         }
-    }    
+    }
+    
+    public function reset()
+    {
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
+        $data = $this->model('Reg')->findWhere(['username' => $username]);
+        if ($data == null ) 
+        {
+            $this->response(409,'Username '.$username.' tidak terdaftar');
+            exit;
+        }
+        else{
+            $data = $this->model('Reg')->update([
+                'password' => password_hash($password, PASSWORD_DEFAULT)
+            ],['username' => $username]);
+            $reg = $this->input->post($data);
+            $this->response(201,
+            [
+                'message'=>'reset password berhasil',
+                'data' => $data
+            ]);
+        }
+    }
 }
