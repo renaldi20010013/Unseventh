@@ -3,10 +3,20 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Database;
 use App\Packages\Auth;
 
 class AuthController extends Controller
 {
+    protected string $table = 'registrasi';
+    protected ?object $statement;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->statement = new Database();
+        $this->statement = $this->statement->connection;
+    }
     public function login()
     {
         Auth::attempt(
@@ -55,25 +65,34 @@ class AuthController extends Controller
         }
     }
     
-    public function reset()
+
+    public function reset(string $username)
     {
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
-        $data = $this->model('Reg')->findWhere(['username' => $username]);
-        if ($data == null ) 
+        $res= $this->model('Reg')->findWhere([
+            'username' => $username,
+        ]);
+        if ($res == null)
         {
-            $this->response(409,'Username '.$username.' tidak terdaftar');
+            $this->response(404, [
+                'message' => 'Username '.$username.' Tidak ditemukan'
+            ]);
             exit;
         }
         else{
-            $data = $this->model('Reg')->update([
-                'password' => password_hash($password, PASSWORD_DEFAULT)
-            ],['username' => $username]);
-            $reg = $this->input->post($data);
-            $this->response(201,
-            [
-                'message'=>'reset password berhasil',
-                'data' => $data
+            $query = "UPDATE `registrasi` 
+            SET password = :password
+            WHERE username = :username";
+
+            $statement = $this->statement->prepare($query);
+
+            $pw = md5($this->input->put('password'));
+            $statement->bindParam(':password', $pw);
+            $statement->bindParam(':username', $username);
+            $statement->execute();
+
+            $this->response(200, [
+                'message' => 'Password berhasil diubah menjadi '.$pw.'',
+          
             ]);
         }
     }
