@@ -12,9 +12,14 @@ return new class extends Migration
     {
         Schema::create('data2', function (Blueprint $table) {
             $table->increment('id');
-            $table->string('nisn',20);
-            $table->string('foto',255);
-            $table->string('kk',255);
+            $table->integer('nisn', 50);
+            $table->string('foto', 50);
+            $table->string('kartu_keluarga', 50);
+            $table->string('ijazah', 50);
+            $table->string('skhun', 50);
+            $table->string('raport', 50);
+            $table->string('keterangan_sehat', 50);
+            $table->string('lampiran', 50);
 
             $table->timestamps();
         });

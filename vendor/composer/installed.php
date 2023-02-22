@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'mardira/mardira-framework',
-        'pretty_version' => 'v1.0.19',
-        'version' => '1.0.19.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => 'f5b303896b8187dd721eda12d8c5f32682cff280',
         'type' => 'framework',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'mardira/mardira-framework' => array(
-            'pretty_version' => 'v1.0.19',
-            'version' => '1.0.19.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'f5b303896b8187dd721eda12d8c5f32682cff280',
             'type' => 'framework',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

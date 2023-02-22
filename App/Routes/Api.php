@@ -57,8 +57,9 @@ Router::controller(Data1Controller::class)->group(function(){
 });
 
 Router::controller(Data2Controller::class)->group(function(){
-    Router::post('/data2', 'upload');
-    Router::put('/data2/{id}', 'update');
+    Router::get('/data2/{id}', 'show');
+    Router::post('/data2', 'create');
+    Router::post('/data2/{id}', 'update');
 });
 
 Router::controller(PendidikanController::class)->group(function(){
