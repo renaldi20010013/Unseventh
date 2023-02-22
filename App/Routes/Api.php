@@ -5,6 +5,7 @@ use App\Core\Router;
 use App\Controllers\UsersController;
 use App\Controllers\AuthController;
 use App\Controllers\Data1Controller;
+use App\Controllers\Data2Controller;
 use App\Controllers\PesertaController;
 use App\Controllers\ProfileController;
 use App\Controllers\RegController;
@@ -51,6 +52,11 @@ Router::controller(Data1Controller::class)->group(function(){
     Router::get('/data1/{id}', 'show');
     Router::post('/data1', 'create');
     Router::put('/data1/{id}', 'update');
+});
+
+Router::controller(Data2Controller::class)->group(function(){
+    Router::post('/data2', 'upload');
+    Router::put('/data2/{id}', 'update');
 });
 
 

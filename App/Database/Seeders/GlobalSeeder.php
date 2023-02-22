@@ -13,5 +13,6 @@ class GlobalSeeder extends Seeder
         $this->call(RegSeeder::class);
         $this->call(ProfileSeeder::class);
         $this->call(PesertaSeeder::class);
+        $this->call(Data2Seeder::class);
     }
 }
