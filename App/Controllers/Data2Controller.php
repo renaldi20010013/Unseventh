@@ -3,65 +3,143 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
-use App\Core\Request;
 
 class Data2Controller extends Controller
 {
-    // public function show($id)
-    // {
-    //     $data = $this->model('Data2')->find($id);
-    //     if ($data == null){
-    //         $this->response(404,'Data tidak ditemukan');
-    //         exit;
-    //     }
-    //     else{
-    //         $this->response(200, $data);
-    //     }
-
-    // }
-
-    public function upload()
+    public function index()
     {
-        $nisn = $this->input->post('nisn');
-        $foto = $this->input->file('foto');
-        $kk = $this->input->file('kk');
-
-        $data = [
-                'nisn' => $nisn,
-                'foto' => $foto,
-                'kk' => $kk,
-        ];
-
-        $this->model('Data2')->create($data);
-
+        $data = $this->model('Data2')->all();
         $this->response(200, $data);
     }
 
-    // public function upload(){
+    public function show($id)
+    {
+        $data = $this->model('Data2')->find($id);
+        if ($data == null){
+            $this->response(404,'Data tidak ditemukan');
+            exit;
+        }
+        else{
+            $this->response(200, $data);
+        }
+    }
 
-    //     $koneksi = mysqli_connect("localhost","root","","lat");
-    //     $nama = $_POST['nama'];
-    //     $foto = $_FILES['foto']['name'];
-    //     $tmp = $_FILES['foto']['tmp_name'];
-    //     $kk = $_FILES['kk']['name'];
-    //     $tmp2 = $_FILES['kk']['tmp_name'];
+    public function create()
+    {
+        // save to sql
+        $nisn = $this->input->post('nisn');
+        $foto = $this->input->file('foto')['name'];
+        $kartu_keluarga = $this->input->file('kartu_keluarga')['name'];
+        $ijazah = $this->input->file('ijazah')['name'];
+        $skhun = $this->input->file('skhun')['name'];
+        $raport = $this->input->file('raport')['name'];
+        $keterangan_sehat = $this->input->file('keterangan_sehat')['name'];
+        $lampiran = $this->input->file('lampiran')['name']; 
+
+        // save to folder
+        $upload_path = 'files/';
+        $tmpfoto = $this->input->file('foto')['tmp_name'];
+        $tmpkartu_keluarga = $this->input->file('kartu_keluarga')['tmp_name'];
+        $tmpijazah = $this->input->file('ijazah')['tmp_name'];
+        $tmpskhun = $this->input->file('skhun')['tmp_name'];
+        $tmpraport = $this->input->file('raport')['tmp_name'];
+        $tmpketerangan_sehat = $this->input->file('keterangan_sehat')['tmp_name'];
+        $tmplampiran = $this->input->file('lampiran')['tmp_name'];  
+
+        move_uploaded_file($tmpfoto, $upload_path .'foto/' . $foto);
+		move_uploaded_file($tmpkartu_keluarga, $upload_path .'kartu keluarga/' .$kartu_keluarga);
+		move_uploaded_file($tmpijazah, $upload_path .'ijazah/' . $ijazah);
+		move_uploaded_file($tmpskhun, $upload_path  .'skhun/' . $skhun);
+		move_uploaded_file($tmpraport, $upload_path  .'raport/' . $raport);
+		move_uploaded_file($tmpketerangan_sehat, $upload_path  .'keterangan sehat/' . $keterangan_sehat);
+		move_uploaded_file($tmplampiran, $upload_path  .'lampiran/' . $lampiran);
+
         
-    //     $rand = rand();
-    //     $ekstensi =  array('png','jpg','jpeg','gif');
-    //     $filename = $_FILES['foto']['name'];
-    //     $ukuran = $_FILES['foto']['size'];
-    //     $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $data = $this->model('Data2')->findWhere(['nisn' => $nisn]);
+        if ($data != null ) 
+        {
+            $this->response(409,'Nisn sudah terdaftar');
+            exit;
+        }
+        else{
+            $store = $this->model('Data2')->create([
+                'nisn' => $nisn,
+                'foto' => $foto,
+                'kartu_keluarga' => $kartu_keluarga,
+                'ijazah' => $ijazah,
+                'skhun' => $skhun,
+                'raport' => $raport,
+                'keterangan_sehat' => $keterangan_sehat,
+                'lampiran' => $lampiran,
+    
+            ]);
+
+            $this->response(201,
+            [
+                'message' => 'Data berhasil disimpan',
+                'data' => $store
+            ]);
+        }
+    }
+
+    public function update(int $id)
+    {
+        // save to sql
+        $nisn = $this->input->post('nisn');
+        $foto = $this->input->file('foto')['name'];
+        $kartu_keluarga = $this->input->file('kartu_keluarga')['name'];
+        $ijazah = $this->input->file('ijazah')['name'];
+        $skhun = $this->input->file('skhun')['name'];
+        $raport = $this->input->file('raport')['name'];
+        $keterangan_sehat = $this->input->file('keterangan_sehat')['name'];
+        $lampiran = $this->input->file('lampiran')['name']; 
+
+        // save to folder
+        $upload_path = 'files/';
+        $tmpfoto = $this->input->file('foto')['tmp_name'];
+        $tmpkartu_keluarga = $this->input->file('kartu_keluarga')['tmp_name'];
+        $tmpijazah = $this->input->file('ijazah')['tmp_name'];
+        $tmpskhun = $this->input->file('skhun')['tmp_name'];
+        $tmpraport = $this->input->file('raport')['tmp_name'];
+        $tmpketerangan_sehat = $this->input->file('keterangan_sehat')['tmp_name'];
+        $tmplampiran = $this->input->file('lampiran')['tmp_name'];  
+
+        move_uploaded_file($tmpfoto, $upload_path .'foto/' . $foto);
+		move_uploaded_file($tmpkartu_keluarga, $upload_path .'kartu keluarga/' .$kartu_keluarga);
+		move_uploaded_file($tmpijazah, $upload_path .'ijazah/' . $ijazah);
+		move_uploaded_file($tmpskhun, $upload_path  .'skhun/' . $skhun);
+		move_uploaded_file($tmpraport, $upload_path  .'raport/' . $raport);
+		move_uploaded_file($tmpketerangan_sehat, $upload_path  .'keterangan sehat/' . $keterangan_sehat);
+		move_uploaded_file($tmplampiran, $upload_path  .'lampiran/' . $lampiran);
+
+        $data = ([
+            'nisn' => $nisn,
+            'foto' => $foto,
+            'kartu_keluarga' => $kartu_keluarga,
+            'ijazah' => $ijazah,
+            'skhun' => $skhun,
+            'raport' => $raport,
+            'keterangan_sehat' => $keterangan_sehat,
+            'lampiran' => $lampiran,
         
+        ]);
         
-    //     if($ukuran < 1044070){		
-    //         $xx = $rand.'_'.$filename;
-    //         move_uploaded_file($_FILES['foto']['tmp_name'], 'gambar/'.$rand.'_'.$filename);
-    //         mysqli_query($koneksi, "INSERT INTO user VALUES(NULL,'$nama','$xx')");
-    //         header("location:index.php?alert=berhasil");
-    //     }else{
-    //          header("location:index.php?alert=gagak_ukuran");
-            
-    //     }
-    // }
+        $data = $this->model('Data2')->find($id);
+        if(!$data){
+            $this->response(404,'Data tidak ditemukan');
+            exit;
+        }else{
+            $data = $this->input->post();  
+            // var_dump($data); die;
+            $update =$this->model('Data2')->update($id, $data);
+            // var_dump($update); die;
+            $this->response(201,
+            [
+                'message' => 'Data berhasil diupdate',
+                'data' =>$update, $data
+            ]);
+        }
+
+    }
 
 }
